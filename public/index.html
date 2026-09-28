@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Social</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="brand-logo">🎓</div>
+                <div class="brand-text">
+                    <span class="brand-name">Classroom</span>
+                    <span class="brand-tag">Social</span>
+                </div>
+            </div>
+
+            <nav class="topnav">
+                <a href="#" class="topnav-link active" onclick="scrollTop(event)">🏠 Home</a>
+                <a href="#feed" class="topnav-link" onclick="scrollToFeed(event)">💬 Feed</a>
+                <a href="#" class="topnav-link" onclick="openProfile(); return false;">👤 Profil</a>
+            </nav>
+
+            <div class="topbar-actions">
+                <button class="avatar-btn" onclick="openProfile()">
+                    <img id="topAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=guest" alt="avatar">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">✨ Ruang kelas digital</div>
+            <h1 class="hero-title">Selamat datang di kelas kita</h1>
+            <p class="hero-sub">Tempat berbagi cerita, momen, dan kebersamaan. Posting apa aja, kapan aja.</p>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value" id="statPosts">0</div>
+                    <div class="hero-stat-label">Postingan</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value" id="statComments">0</div>
+                    <div class="hero-stat-label">Komentar</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value" id="statLikes">0</div>
+                    <div class="hero-stat-label">Suka</div>
+                </div>
+            </div>
+
+            <button class="hero-cta" onclick="scrollToFeed(event); focusCompose();">
+                ✏️ Mulai Posting
+            </button>
+        </div>
+    </section>
+
+    <!-- LAYOUT -->
+    <main class="layout">
+
+        <!-- SIDEBAR LEFT -->
+        <aside class="sidebar-left">
+            <div class="side-card">
+                <h3 class="side-title">Navigasi</h3>
+                <a href="#" class="side-item active" onclick="scrollTop(event)">
+                    <span>🏠</span> Beranda
+                </a>
+                <a href="#feed" class="side-item" onclick="scrollToFeed(event)">
+                    <span>💬</span> Feed Kelas
+                </a>
+                <a href="#" class="side-item" onclick="openProfile(); return false;">
+                    <span>👤</span> Profil
+                </a>
+            </div>
+
+            <div class="side-card">
+                <h3 class="side-title">🔥 Trending</h3>
+                <div class="trend-list">
+                    <div class="trend-item" onclick="searchTag('#ClassMeeting')">
+                        <span class="trend-tag">#ClassMeeting</span>
+                        <span class="trend-count">12</span>
+                    </div>
+                    <div class="trend-item" onclick="searchTag('#BelajarBareng')">
+                        <span class="trend-tag">#BelajarBareng</span>
+                        <span class="trend-count">8</span>
+                    </div>
+                    <div class="trend-item" onclick="searchTag('#PensiSekolah')">
+                        <span class="trend-tag">#PensiSekolah</span>
+                        <span class="trend-count">5</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- FEED -->
+        <section class="feed" id="feed">
+
+            <!-- COMPOSE -->
+            <div class="compose-card">
+                <div class="compose-top">
+                    <img id="composeAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=guest" class="compose-avatar" alt="avatar">
+                    <div class="compose-body">
+                        <textarea id="postContent" placeholder="Apa yang sedang terjadi di kelas?" rows="2"></textarea>
+                        <div id="mediaPreview" class="media-preview hidden"></div>
+                    </div>
+                </div>
+                <div class="compose-bottom">
+                    <div class="compose-actions">
+                        <label class="compose-btn" title="Upload foto">
+                            📷
+                            <input type="file" accept="image/*" hidden onchange="handleMedia(this, 'image')">
+                        </label>
+                        <label class="compose-btn" title="Upload video">
+                            🎥
+                            <input type="file" accept="video/*" hidden onchange="handleMedia(this, 'video')">
+                        </label>
+                        <span class="char-count" id="charCount">0</span>
+                    </div>
+                    <button class="btn-post" id="postBtn" onclick="createPost()" disabled>Posting</button>
+                </div>
+            </div>
+
+            <!-- FILTER -->
+            <div class="feed-filter">
+                <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">📋 Semua</button>
+                <button class="filter-btn" data-filter="media" onclick="setFilter('media', this)">📸 Media</button>
+                <button class="filter-btn" data-filter="text" onclick="setFilter('text', this)">✍️ Teks</button>
+            </div>
+
+            <!-- TIMELINE -->
+            <div id="timeline" class="timeline">
+                <div class="empty-feed">Memuat feed...</div>
+            </div>
+        </section>
+
+        <!-- SIDEBAR RIGHT -->
+        <aside class="sidebar-right">
+            <div class="side-card">
+                <h3 class="side-title">👥 Info Kelas</h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">Total Siswa</span>
+                        <span class="info-value">32</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Mata Pelajaran</span>
+                        <span class="info-value">12</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Wali Kelas</span>
+                        <span class="info-value">Bu Sri</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-card">
+                <h3 class="side-title">💡 Tips</h3>
+                <p class="side-tip">Gunakan <strong>#hashtag</strong> biar postinganmu gampang dicari temen sekelas.</p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>© 2026 Classroom Social · Dibuat untuk kelas</p>
+        </div>
+    </footer>
+
+    <!-- MODAL PROFILE -->
+    <div class="modal" id="profileModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeProfile()">✕</button>
+            <h2 class="modal-title">Profil Kamu</h2>
+            <div class="profile-avatar-wrap">
+                <img id="profileAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=guest" class="profile-avatar" alt="avatar">
+                <label class="avatar-edit">
+                    ✏️
+                    <input type="file" accept="image/*" hidden onchange="uploadAvatar(this)">
+                </label>
+            </div>
+            <label class="field-label">Username</label>
+            <input id="profileUsername" class="field-input" placeholder="username" maxlength="20">
+            <label class="field-label">Nama Tampilan</label>
+            <input id="profileDisplayName" class="field-input" placeholder="Nama kamu" maxlength="30">
+            <label class="field-label">Bio</label>
+            <textarea id="profileBio" class="field-input" rows="3" placeholder="Tulis bio singkat..."></textarea>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeProfile()">Batal</button>
+                <button class="btn-primary" onclick="saveProfile()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMMENTS -->
+    <div class="modal" id="commentModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeComments()">✕</button>
+            <h2 class="modal-title">Komentar</h2>
+            <div id="commentsList" class="comments-list"></div>
+            <div class="comment-input-row">
+                <input id="commentInput" class="field-input" placeholder="Tulis komentar...">
+                <button class="btn-primary" onclick="submitComment()">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
